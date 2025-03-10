@@ -29,6 +29,41 @@ public class Brain(IServiceProvider serviceProvider, ILogger<Brain> logger) : IB
             kernel: kernel
         );
 
-        logger.LogInformation("AI Response: {Response}", result);
+        logger.LogInformation("AI Response: {Response}", result.Content ?? "No response");
+        history.AddMessage(result.Role, result.Content ?? "No response");
+
+        history.AddUserMessage("what is the local timezone Iana id?");
+
+        result = await chatCompletionService.GetChatMessageContentAsync(
+            history,
+            executionSettings: openAIPromptExecutionSettings,
+            kernel: kernel
+        );
+
+        logger.LogInformation("AI Response: {Response}", result.Content ?? "No response");
+
+        history.AddMessage(result.Role, result.Content ?? "No response");
+
+        history.AddUserMessage("what is the current time in India?");
+        result = await chatCompletionService.GetChatMessageContentAsync(
+            history,
+            executionSettings: openAIPromptExecutionSettings,
+            kernel: kernel
+        );
+
+        logger.LogInformation("AI Response: {Response}", result.Content ?? "No response");
+
+        history.AddMessage(result.Role, result.Content ?? "No response");
+        history.AddUserMessage(
+            "what is the datetime in India. When the equivalent date time in EST is 03/10/2025 4PM?"
+        );
+
+        result = await chatCompletionService.GetChatMessageContentAsync(
+            history,
+            executionSettings: openAIPromptExecutionSettings,
+            kernel: kernel
+        );
+
+        logger.LogInformation("AI Response: {Response}", result.Content ?? "No response");
     }
 }

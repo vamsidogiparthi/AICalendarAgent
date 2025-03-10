@@ -28,11 +28,18 @@ var openAIConfiguration =
     configuration.GetSection(OpenAIConfiguration.SectionName).Get<OpenAIConfiguration>()
     ?? throw new Exception("OpenAI configuration is missing");
 
-builder.AddAzureOpenAIChatCompletion(
-    openAIConfiguration.ModelId,
-    openAIConfiguration.Endpoint,
-    openAIConfiguration.ApiKey
-);
+// var azureOpenAIConfiguration =
+//     configuration.GetSection(AzureOpenAIConfiguration.SectionName).Get<AzureOpenAIConfiguration>()
+//     ?? throw new Exception("Azure OpenAI configuration is missing");
+
+// below is for the azure openai chat completion
+// builder.AddAzureOpenAIChatCompletion(
+//     azureOpenAIConfiguration.ModelId,
+//     azureOpenAIConfiguration.Endpoint,
+//     azureOpenAIConfiguration.ApiKey
+// );
+
+builder.AddOpenAIChatCompletion(openAIConfiguration.ModelId, openAIConfiguration.ApiKey);
 
 var kernel = builder.Build();
 kernel.Plugins.AddFromType<TimePlugin>();
@@ -41,4 +48,4 @@ builder.Services.AddSingleton<IAutoFunctionInvocationFilter, LoggingFunctionFilt
 
 var logger = kernel.GetRequiredService<ILogger<Program>>();
 logger.LogInformation("Starting the AI Calendar Agent");
-kernel.GetRequiredService<IBrain>().Run(kernel).Wait();
+await kernel.GetRequiredService<IBrain>().Run(kernel);

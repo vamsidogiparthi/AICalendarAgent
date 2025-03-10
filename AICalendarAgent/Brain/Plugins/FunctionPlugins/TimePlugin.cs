@@ -55,5 +55,41 @@ namespace AICalendarAgent.Brain.Plugins.FunctionPlugins
         {
             return TimeZoneInfo.Local.Id;
         }
+
+        [KernelFunction("convert_to_desired_time_zone")]
+        [Description("Convert the given time to the desired time zone.")]
+        public static string ConvertToDesiredTimeZone(
+            string time,
+            string sourceTimeZone,
+            string destinationTimeZone
+        )
+        {
+            DateTime dateTime = DateTime.Parse(time);
+            TimeZoneInfo sourceTZ = TimeZoneInfo.FindSystemTimeZoneById(sourceTimeZone);
+            TimeZoneInfo destinationTZ = TimeZoneInfo.FindSystemTimeZoneById(destinationTimeZone);
+
+            dateTime = TimeZoneInfo.ConvertTime(dateTime, sourceTZ, destinationTZ);
+            return dateTime.ToString("yyyy-MM-dd HH:mm:ss");
+        }
+
+        [KernelFunction("get_time_in_time_zone")]
+        [Description("Get the current time in the given time zone.")]
+        public static string GetCurrentTimeInTimeZone(string timeZone)
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+            dateTime = TimeZoneInfo.ConvertTimeFromUtc(dateTime, timeZoneInfo);
+            return dateTime.ToString("HH:mm:ss");
+        }
+
+        [KernelFunction("get_current_date_time_in_time_zone")]
+        [Description("Get the current time in the given time zone.")]
+        public static string GetCurrentDateTimeInTimeZone(string timeZone)
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+            dateTime = TimeZoneInfo.ConvertTimeFromUtc(dateTime, timeZoneInfo);
+            return dateTime.ToString("yyyy-MM-dd HH:mm:ss");
+        }
     }
 }
