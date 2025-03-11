@@ -26,7 +26,6 @@ builder.Services.Configure<GoogleCalendarAPISettings>(
 
 builder.Services.AddScoped<ICalendarService, CalendarService>();
 builder.Services.AddTransient<IBrain, Brain>();
-builder.Services.AddTransient<CalendarPlugin>(); // Register CalendarPlugin
 
 var openAIConfiguration =
     configuration.GetSection(OpenAIConfiguration.SectionName).Get<OpenAIConfiguration>()
@@ -35,6 +34,7 @@ var openAIConfiguration =
 var googleCalendarSettings =
     configuration.GetSection(GoogleCalendarAPISettings.SectionName).Get<GoogleCalendarAPISettings>()
     ?? throw new Exception("GoogleCalendarAPISettings configuration is missing");
+
 // var azureOpenAIConfiguration =
 //     configuration.GetSection(AzureOpenAIConfiguration.SectionName).Get<AzureOpenAIConfiguration>()
 //     ?? throw new Exception("Azure OpenAI configuration is missing");
