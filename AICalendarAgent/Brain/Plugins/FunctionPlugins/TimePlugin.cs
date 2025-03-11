@@ -91,5 +91,12 @@ namespace AICalendarAgent.Brain.Plugins.FunctionPlugins
             dateTime = TimeZoneInfo.ConvertTimeFromUtc(dateTime, timeZoneInfo);
             return dateTime.ToString("yyyy-MM-dd HH:mm:ss");
         }
+
+        [KernelFunction("Get_Date_Time_In_Date_Time_Offset")]
+        [Description("Get the Date time offset for the given Date Time.")]
+        public static DateTimeOffset GetDateTimeInDateTimeOffset(string dateTime)
+        {
+            return DateTimeOffset.Parse(dateTime);
+        }
     }
 }
