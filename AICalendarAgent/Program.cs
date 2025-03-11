@@ -56,5 +56,8 @@ builder.Services.AddSingleton<IAutoFunctionInvocationFilter, LoggingFunctionFilt
 
 var logger = kernel.GetRequiredService<ILogger<Program>>();
 logger.LogInformation("Starting the AI Calendar Agent");
-logger.LogInformation("Starting the AI Calendar Agent {0}", googleCalendarSettings);
+logger.LogInformation(
+    "Starting the AI Calendar Agent {googleCalendarSettings}",
+    googleCalendarSettings
+);
 await kernel.GetRequiredService<IBrain>().Run(kernel);
