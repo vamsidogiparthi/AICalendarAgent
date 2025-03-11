@@ -24,20 +24,7 @@ public class CalendarService(
 {
     public async Task<List<CalendarListEntry>> GetMyCalendarList()
     {
-        GoogleCredential googleCredential;
-        using (
-            var stream = new FileStream(
-                "../AICalendarAgent/aicalendaragent-453303-884a42dd2c74.json",
-                FileMode.Open,
-                FileAccess.Read
-            )
-        )
-        {
-            googleCredential = GoogleCredential
-                .FromStream(stream)
-                .CreateScoped(options.Value.Scopes);
-        }
-
+        var googleCredential = GetGoogleCredential();
         var service = new Google.Apis.Calendar.v3.CalendarService(
             new Google.Apis.Services.BaseClientService.Initializer
             {
@@ -59,22 +46,7 @@ public class CalendarService(
         DateTimeOffset endTime
     )
     {
-        GoogleCredential googleCredential;
-        using (
-            var stream = new FileStream(
-                Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "aicalendaragent-453303-884a42dd2c74.json"
-                ),
-                FileMode.Open,
-                FileAccess.Read
-            )
-        )
-        {
-            googleCredential = GoogleCredential
-                .FromStream(stream)
-                .CreateScoped(options.Value.Scopes);
-        }
+        var googleCredential = GetGoogleCredential();
 
         // authentication flow for the google calendar using user auth token
         // var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
@@ -119,5 +91,20 @@ public class CalendarService(
         logger.LogInformation(
             $"Event created: {title} - {description} - {startTime} - {endTime} - {createdEvent.HtmlLink}"
         );
+    }
+
+    protected GoogleCredential GetGoogleCredential()
+    {
+        GoogleCredential googleCredential;
+        using var stream = new FileStream(
+            Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "aicalendaragent-453303-884a42dd2c74.json"
+            ),
+            FileMode.Open,
+            FileAccess.Read
+        );
+        googleCredential = GoogleCredential.FromStream(stream).CreateScoped(options.Value.Scopes);
+        return googleCredential;
     }
 }
